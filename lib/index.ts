@@ -303,6 +303,10 @@ async function cleanup(context: IMochaContext) {
  *    });
  */
 export function addToRepl(name: string, value: any, description: string = "no description") {
+  if (process.env.MOCHA_WORKER_ID === undefined) {
+    // repl is awkward in parallel mode.
+    return;
+  }
   after(function() {
     if (suiteFailed(this) && noexit) {
       replContext[name] = value;

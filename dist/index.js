@@ -282,6 +282,10 @@ async function cleanup(context) {
  *    });
  */
 function addToRepl(name, value, description = "no description") {
+    if (process.env.MOCHA_WORKER_ID === undefined) {
+        // repl is awkward in parallel mode.
+        return;
+    }
     after(function () {
         if (suiteFailed(this) && noexit) {
             replContext[name] = value;
